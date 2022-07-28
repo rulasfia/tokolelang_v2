@@ -18,7 +18,7 @@ const Button = (props: ComponentProps) => {
       {...buttonProps}
       ref={ref}
       className={clsx(
-        "border-2 capitalize transition duration-75",
+        "border-2 font-medium capitalize transition duration-75",
         "focus:outline-none focus-visible:ring focus-visible:ring-opacity-75",
         "py-2.5 px-6 rounded-md",
         "focus-visible:ring-amber-400",

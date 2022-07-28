@@ -6,8 +6,8 @@ const TerbukaPage: NextPageWithLayout = () => {
   const { data } = useSession();
   return (
     <>
-      <main className="w-screen min-h-screen bg-amber-50 p-4">
-        <h2 className="text-[3rem] lg:text-[5rem] md:text-[5rem] font-extrabold text-gray-700">
+      <main className="w-screen min-h-screen p-4">
+        <h2 className="text-3xl lg:text-5xl md:text-5xl font-extrabold text-gray-700">
           Lelang Terbuka
         </h2>
 
