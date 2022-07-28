@@ -52,7 +52,7 @@ const CreateNewKategori = () => {
       title="Buat Kategori Baru"
       trigger={
         <button type="button" className="w-2/5 text-sm">
-          Buat
+          Tambah Kategori
         </button>
       }
     >

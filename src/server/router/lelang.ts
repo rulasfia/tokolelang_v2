@@ -37,6 +37,32 @@ export const lelangRouter = createRouter()
       return products;
     },
   })
+  .query("terbuka", {
+    resolve: async ({ ctx }) => {
+      const today = new Date();
+
+      const products = await ctx.prisma.product.findMany({
+        where: { closingDate: { gte: today } },
+        select: productSelectorWithCategory,
+      });
+
+      return products;
+    },
+  })
+  .query("dibuat", {
+    resolve: async ({ ctx }) => {
+      const userId = ctx.session?.user?.id;
+
+      if (!userId) return null;
+
+      const products = await ctx.prisma.product.findMany({
+        where: { userId },
+        select: productSelectorWithCategory,
+      });
+
+      return products;
+    },
+  })
   .mutation("create", {
     input: z.object({
       data: newLelangSchema,
@@ -46,6 +72,7 @@ export const lelangRouter = createRouter()
       const newProduct = await ctx.prisma.product.create({
         data: {
           ...input.data,
+          openingPrice: Number(input.data.openingPrice),
           userId: input.userId,
         },
         select: productSelectorWithCategory,

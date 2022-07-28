@@ -9,10 +9,16 @@ import { useZodForm } from "@utils/hooks/useZodForm";
 import { newLelangSchema } from "@utils/validation/lelangSchema";
 import Button from "@components/atoms/Button";
 import CreateNewKategori from "@components/organisms/Kategori/CreateNewKategori";
+import { useState } from "react";
+import { formatDateTimeInput } from "@utils/transformers/formatDateTime";
 
 const LelangBaruPage: NextPageWithLayout = () => {
   const { data: sessionData } = useSession();
   const router = useRouter();
+
+  const [controlledForms, setControlledForms] = useState({
+    datetime: formatDateTimeInput(new Date()),
+  });
 
   const utils = trpc.useContext();
   const { data: categories } = trpc.useQuery(["kategori.all"]);
@@ -36,7 +42,12 @@ const LelangBaruPage: NextPageWithLayout = () => {
   const onSubmitHandler: SubmitHandler<INewLelangSchema> = async (values) => {
     if (!!sessionData && sessionData.user?.id) {
       try {
-        createLelang.mutate({ data: values, userId: sessionData.user.id });
+        const closingDate = new Date(controlledForms.datetime);
+
+        createLelang.mutate({
+          data: { ...values, closingDate },
+          userId: sessionData.user.id,
+        });
 
         router.push("/lelang-dibuat");
       } catch (error) {
@@ -88,7 +99,13 @@ const LelangBaruPage: NextPageWithLayout = () => {
           <input
             type="datetime-local"
             id="closingDate"
-            {...methods.register("closingDate")}
+            value={controlledForms.datetime}
+            onChange={(e) =>
+              setControlledForms((cv) => ({
+                ...cv,
+                datetime: formatDateTimeInput(new Date(e.target.value)),
+              }))
+            }
           />
           {methods.formState.errors.closingDate?.message && (
             <p className="text-red-700">
