@@ -14,10 +14,12 @@ const NavLink = ({ children, href }: ComponentProps) => {
     <LinkTo
       href={href}
       className={clsx(
-        "px-5 py-1.5 rounded-md outline-transparent focus-visible:outline-amber-400 font-medium text-gray-700 hover:bg-amber-100",
+        "relative inline-block cursor-pointer rounded-md py-3 text-base font-medium outline-none",
+        "rounded-none py-2 hover:text-primary-600",
+        "-mb-0.5 border-b-2 ",
         pathname.includes(href)
-          ? "text-amber-700 bg-amber-100"
-          : "bg-transparent text-gray-500"
+          ? "border-primary-600 text-primary-600"
+          : "border-gray-200 text-gray-500"
       )}
     >
       {children}

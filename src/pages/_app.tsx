@@ -1,20 +1,20 @@
 // src/pages/_app.tsx
+import "@styles/globals.css";
 import { withTRPC } from "@trpc/next";
-import type { AppRouter } from "../server/router";
 import type { NextPage } from "next";
-import type { AppType } from "next/dist/shared/lib/utils";
+import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
+import type { AppType } from "next/dist/shared/lib/utils";
 import type { ReactElement, ReactNode } from "react";
 import { Suspense } from "react";
-import superjson from "superjson";
-import { SessionProvider } from "next-auth/react";
 import { ReactQueryDevtools } from "react-query/devtools";
-import "@styles/globals.css";
+import superjson from "superjson";
+import type { AppRouter } from "../server/router";
 
-import DefaultLayout from "@components/layouts/DefaultLayout";
-import { ErrorBoundaryProvider } from "@components/providers/ErrorBoundaryProvider";
-import { AuthProvider } from "@components/providers/AuthProvider";
 import LoadingSpinner from "@components/atoms/Spinner";
+import DefaultLayout from "@components/layouts/DefaultLayout";
+import { AuthProvider } from "@components/providers/AuthProvider";
+import { ErrorBoundaryProvider } from "@components/providers/ErrorBoundaryProvider";
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -31,20 +31,22 @@ const MyApp = (({
   const getLayout =
     Component.getLayout ?? ((page) => <DefaultLayout>{page}</DefaultLayout>);
 
-  return getLayout(
+  return (
     <SessionProvider session={session}>
       <ErrorBoundaryProvider>
         <Suspense fallback={<LoadingSpinner withContainer />}>
-          <AuthProvider>
-            {process.env.NODE_ENV !== "production" && (
-              <ReactQueryDevtools
-                initialIsOpen={false}
-                position="bottom-right"
-              />
-            )}
+          {getLayout(
+            <AuthProvider>
+              <Component {...pageProps} />
 
-            <Component {...pageProps} />
-          </AuthProvider>
+              {process.env.NODE_ENV !== "production" && (
+                <ReactQueryDevtools
+                  initialIsOpen={false}
+                  position="bottom-right"
+                />
+              )}
+            </AuthProvider>
+          )}
         </Suspense>
       </ErrorBoundaryProvider>
     </SessionProvider>

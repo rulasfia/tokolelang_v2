@@ -14,4 +14,12 @@ function defineNextConfig(config) {
 
 export default defineNextConfig({
   reactStrictMode: true,
+  images: {
+    domains: ["avatars.githubusercontent.com"],
+  },
+  experimental: {
+    images: {
+      allowFutureImage: true,
+    },
+  },
 });

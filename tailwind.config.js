@@ -1,9 +1,26 @@
 /** @type {import('tailwindcss').Config} */
 
+const colors = require('tailwindcss/colors')
+
 module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      colors: {
+        gray: colors.neutral,
+        primary: {
+          50: "#FCF9F2",
+          100: "#F9F3E6",
+          200: "#F3E5C9",
+          300: "#EDD9B0",
+          400: "#E7CB93",
+          500: "#E1BE79",
+          600: "#D4A23F",
+          700: "#AB7F26",
+          800: "#715319",
+          900: "#3A2B0D",
+        },
+      },
       boxShadow: {
         slider: "0 0 0 5px rgba(0, 0, 0, 0.3)",
       },

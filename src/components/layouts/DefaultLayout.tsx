@@ -15,7 +15,7 @@ const DefaultLayout = ({ children }: ComponentProps) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="text-gray-900 scroll-smooth antialiased">{children}</div>
+      {children}
     </>
   );
 };
