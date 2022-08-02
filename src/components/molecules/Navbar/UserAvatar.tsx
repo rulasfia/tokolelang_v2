@@ -10,8 +10,8 @@ export default function UserAvatar() {
   return (
     <LinkTo href="/profil" className="focus-visible:outline-none">
       <Image
-        height={36}
-        width={36}
+        height={32}
+        width={32}
         className="rounded-full"
         src={data?.user?.image ?? DefaultAvatar}
         alt="avatar"

@@ -20,7 +20,7 @@ const AuthenticatedLayout = ({ children }: ComponentProps) => {
       <Navbar />
 
       {/* content */}
-      <div className="container mx-auto">{children}</div>
+      <div className="container mx-auto px-6 sm:px-0">{children}</div>
     </>
   );
 };

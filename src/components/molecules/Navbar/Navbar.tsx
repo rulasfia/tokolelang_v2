@@ -23,14 +23,14 @@ const NAV_MENUS = [
 
 const Navbar = () => {
   return (
-    <nav className="container sticky top-0 mx-auto flex h-32 flex-col justify-center bg-white">
+    <nav className="container sticky top-0 mx-auto flex h-32 flex-col justify-center bg-white px-6 sm:px-0">
       {/* navbar top content */}
       <div className="mb-2 flex flex-row items-center justify-between">
         <h3 className="text-2xl font-bold text-gray-700">TokoLelang</h3>
       </div>
 
       {/* navbar bottom content */}
-      <div className="flex w-full flex-row items-center justify-between border-b-2 border-gray-200">
+      <div className="hidden w-full flex-row items-center justify-between border-b-2 border-gray-200 md:flex">
         <div className="flex flex-row items-center justify-start gap-x-12">
           {/* navigation menu */}
           {NAV_MENUS.map((menu) => (
