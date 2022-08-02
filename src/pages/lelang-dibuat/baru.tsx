@@ -1,4 +1,5 @@
 import Button from "@components/atoms/Button";
+import Label from "@components/atoms/input/Label";
 import TextArea from "@components/atoms/input/TextArea";
 import TextField from "@components/atoms/input/TextField";
 import AuthenticatedLayout from "@components/layouts/AuthenticatedLayout";
@@ -70,7 +71,7 @@ const LelangBaruPage: NextPageWithLayout = () => {
           noValidate
         >
           <div className="mb-6 flex flex-col gap-x-3">
-            <label htmlFor="name">Nama </label>
+            <Label id="name">Nama</Label>
             <TextField statefull type="text" id="nama" />
             {methods.formState.errors.name?.message && (
               <p className="text-red-700">
@@ -78,7 +79,7 @@ const LelangBaruPage: NextPageWithLayout = () => {
               </p>
             )}
 
-            <label htmlFor="description">Deskripsi Barang</label>
+            <Label id="description">Deskripsi Barang</Label>
             <TextArea statefull id="description" />
             {methods.formState.errors.description?.message && (
               <p className="text-red-700">
@@ -86,7 +87,7 @@ const LelangBaruPage: NextPageWithLayout = () => {
               </p>
             )}
 
-            <label htmlFor="openingPrice">Harga Pembukaan</label>
+            <Label id="openingPrice">Harga Pembukaan</Label>
             <TextField
               statefull
               type="text"
@@ -99,7 +100,7 @@ const LelangBaruPage: NextPageWithLayout = () => {
               </p>
             )}
 
-            <label htmlFor="closingDate">Tanggal Penutupan Lelang</label>
+            <Label id="closingDate">Tanggal Penutupan Lelang</Label>
             <TextField
               type="datetime-local"
               id="closingDate"
@@ -118,7 +119,7 @@ const LelangBaruPage: NextPageWithLayout = () => {
               </p>
             )}
 
-            <label htmlFor="location">Lokasi</label>
+            <Label id="location">Lokasi</Label>
             <TextField statefull type="text" id="location" />
             {methods.formState.errors.location?.message && (
               <p className="text-red-700">
@@ -126,7 +127,7 @@ const LelangBaruPage: NextPageWithLayout = () => {
               </p>
             )}
 
-            <label htmlFor="categoryID">Kategori Barang</label>
+            <Label id="categoryID">Kategori Barang</Label>
             <div className="flex flex-row gap-x-3">
               <select {...methods.register("categoryID")} className="w-3/5">
                 {categories?.map((cat) => (
