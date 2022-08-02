@@ -1,6 +1,6 @@
 import LinkTo from "@components/atoms/LinkTo";
 import { useSession } from "next-auth/react";
-import Image from "next/future/image";
+import Image from "next/image";
 import DefaultAvatar from "../../../../public/images/avatar-min.png";
 
 export default function UserAvatar() {

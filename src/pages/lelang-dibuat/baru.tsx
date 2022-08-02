@@ -1,4 +1,6 @@
 import Button from "@components/atoms/Button";
+import TextArea from "@components/atoms/input/TextArea";
+import TextField from "@components/atoms/input/TextField";
 import AuthenticatedLayout from "@components/layouts/AuthenticatedLayout";
 import CreateNewKategori from "@components/organisms/Kategori/CreateNewKategori";
 import type { NextPageWithLayout } from "@pages/_app";
@@ -10,7 +12,7 @@ import { newLelangSchema } from "@utils/validation/lelangSchema";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import type { SubmitHandler } from "react-hook-form";
+import { FormProvider, SubmitHandler } from "react-hook-form";
 
 const LelangBaruPage: NextPageWithLayout = () => {
   const { data: sessionData } = useSession();
@@ -61,85 +63,88 @@ const LelangBaruPage: NextPageWithLayout = () => {
     <main>
       <h2>Lelang Baru</h2>
 
-      <form
-        onSubmit={methods.handleSubmit(onSubmitHandler)}
-        className="flex w-2/5 flex-col gap-x-3 p-6"
-        noValidate
-      >
-        <div className="mb-6 flex flex-col gap-x-3">
-          <label htmlFor="name">Nama </label>
-          <input type="text" id="name" {...methods.register("name")} />
-          {methods.formState.errors.name?.message && (
-            <p className="text-red-700">
-              {methods.formState.errors.name?.message}
-            </p>
-          )}
+      <FormProvider {...methods}>
+        <form
+          onSubmit={methods.handleSubmit(onSubmitHandler)}
+          className="flex w-2/5 flex-col gap-x-3 p-6"
+          noValidate
+        >
+          <div className="mb-6 flex flex-col gap-x-3">
+            <label htmlFor="name">Nama </label>
+            <TextField statefull type="text" id="nama" />
+            {methods.formState.errors.name?.message && (
+              <p className="text-red-700">
+                {methods.formState.errors.name?.message}
+              </p>
+            )}
 
-          <label htmlFor="description">Deskripsi Barang</label>
-          <textarea id="description" {...methods.register("description")} />
-          {methods.formState.errors.description?.message && (
-            <p className="text-red-700">
-              {methods.formState.errors.description?.message}
-            </p>
-          )}
+            <label htmlFor="description">Deskripsi Barang</label>
+            <TextArea statefull id="description" />
+            {methods.formState.errors.description?.message && (
+              <p className="text-red-700">
+                {methods.formState.errors.description?.message}
+              </p>
+            )}
 
-          <label htmlFor="openingPrice">Harga Pembukaan</label>
-          <input
-            type="text"
-            id="openingPrice"
-            pattern="^[0-9]*$"
-            {...methods.register("openingPrice")}
-          />
-          {methods.formState.errors.openingPrice?.message && (
-            <p className="text-red-700">
-              {methods.formState.errors.openingPrice?.message}
-            </p>
-          )}
+            <label htmlFor="openingPrice">Harga Pembukaan</label>
+            <TextField
+              statefull
+              type="text"
+              id="openingPrice"
+              pattern="^[0-9]*$"
+            />
+            {methods.formState.errors.openingPrice?.message && (
+              <p className="text-red-700">
+                {methods.formState.errors.openingPrice?.message}
+              </p>
+            )}
 
-          <label htmlFor="closingDate">Tanggal Penutupan Lelang</label>
-          <input
-            type="datetime-local"
-            id="closingDate"
-            value={controlledForms.datetime}
-            onChange={(e) =>
-              setControlledForms((cv) => ({
-                ...cv,
-                datetime: formatDateTimeInput(new Date(e.target.value)),
-              }))
-            }
-          />
-          {methods.formState.errors.closingDate?.message && (
-            <p className="text-red-700">
-              {methods.formState.errors.closingDate?.message}
-            </p>
-          )}
+            <label htmlFor="closingDate">Tanggal Penutupan Lelang</label>
+            <TextField
+              type="datetime-local"
+              id="closingDate"
+              value={controlledForms.datetime}
+              onChange={(e) =>
+                setControlledForms((cv) => ({
+                  ...cv,
+                  datetime: formatDateTimeInput(new Date(e.target.value)),
+                }))
+              }
+            />
 
-          <label htmlFor="location">Lokasi </label>
-          <input type="text" id="location" {...methods.register("location")} />
-          {methods.formState.errors.location?.message && (
-            <p className="text-red-700">
-              {methods.formState.errors.location?.message}
-            </p>
-          )}
+            {methods.formState.errors.closingDate?.message && (
+              <p className="text-red-700">
+                {methods.formState.errors.closingDate?.message}
+              </p>
+            )}
 
-          <label htmlFor="categoryID">Kategori Barang</label>
-          <div className="flex flex-row gap-x-3">
-            <select {...methods.register("categoryID")} className="w-3/5">
-              {categories?.map((cat) => (
-                <option value={cat.id} key={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
+            <label htmlFor="location">Lokasi</label>
+            <TextField statefull type="text" id="location" />
+            {methods.formState.errors.location?.message && (
+              <p className="text-red-700">
+                {methods.formState.errors.location?.message}
+              </p>
+            )}
 
-            <CreateNewKategori />
+            <label htmlFor="categoryID">Kategori Barang</label>
+            <div className="flex flex-row gap-x-3">
+              <select {...methods.register("categoryID")} className="w-3/5">
+                {categories?.map((cat) => (
+                  <option value={cat.id} key={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+
+              <CreateNewKategori />
+            </div>
           </div>
-        </div>
 
-        <Button type="submit">
-          {createLelang.isLoading ? "Loading..." : "Buat Lelang Baru"}
-        </Button>
-      </form>
+          <Button type="submit">
+            {createLelang.isLoading ? "Loading..." : "Buat Lelang Baru"}
+          </Button>
+        </form>
+      </FormProvider>
     </main>
   );
 };

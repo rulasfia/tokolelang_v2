@@ -1,6 +1,6 @@
 import type { Prisma } from "@prisma/client";
 
-export const productDefaultSelector: Prisma.ProductSelect = {
+export const productDefaultSelector = {
   id: true,
   name: true,
   description: true,
@@ -16,7 +16,7 @@ export const productDefaultSelector: Prisma.ProductSelect = {
   },
 };
 
-export const withCategory: Prisma.ProductSelect = {
+export const withCategory = {
   category: {
     select: {
       id: true,
@@ -25,7 +25,7 @@ export const withCategory: Prisma.ProductSelect = {
   },
 };
 
-export const withImages: Prisma.ProductSelect = {
+export const withImages = {
   images: {
     select: {
       id: true,
@@ -35,7 +35,7 @@ export const withImages: Prisma.ProductSelect = {
   },
 };
 
-export const withHighestBid: Prisma.ProductSelect = {
+export const withHighestBid = {
   offers: {
     take: 1,
     orderBy: {
@@ -54,7 +54,7 @@ export const withHighestBid: Prisma.ProductSelect = {
   },
 };
 
-export const withAllBid: Prisma.ProductSelect = {
+export const withAllBid = {
   offers: {
     select: {
       id: true,
