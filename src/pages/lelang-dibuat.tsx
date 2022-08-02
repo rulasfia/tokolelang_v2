@@ -1,7 +1,6 @@
 import LinkTo from "@components/atoms/LinkTo";
 import AuthenticatedLayout from "@components/layouts/AuthenticatedLayout";
 import { trpc } from "@utils/trpc";
-import { useSession } from "next-auth/react";
 import { NextPageWithLayout } from "./_app";
 
 const LelangDibuatPage: NextPageWithLayout = () => {

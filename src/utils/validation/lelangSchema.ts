@@ -6,6 +6,7 @@ export const newLelangSchema = z.object({
   openingPrice: z.string().regex(/^[0-9]*$/, "Opening price must be a number"),
   closingDate: z.date(),
   categoryID: z.string(),
+  location: z.string(),
 });
 
 export type INewLelangSchema = z.infer<typeof newLelangSchema>;

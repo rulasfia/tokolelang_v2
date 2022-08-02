@@ -1,37 +1,22 @@
-import { createRouter } from "./context";
-import { z } from "zod";
+import {
+  productDefaultSelector,
+  withCategory,
+  withHighestBid,
+  withImages,
+} from "@server/selector/lelangSelector";
 import { newLelangSchema } from "@utils/validation/lelangSchema";
-
-const productDefaultSelector = {
-  id: true,
-  name: true,
-  description: true,
-  openingPrice: true,
-  closingDate: true,
-  user: {
-    select: {
-      id: true,
-      name: true,
-      email: true,
-    },
-  },
-};
-
-const productSelectorWithCategory = {
-  ...productDefaultSelector,
-  category: {
-    select: {
-      id: true,
-      name: true,
-    },
-  },
-};
+import { z } from "zod";
+import { createRouter } from "./context";
 
 export const lelangRouter = createRouter()
   .query("all", {
     resolve: async ({ ctx }) => {
       const products = await ctx.prisma.product.findMany({
-        select: productSelectorWithCategory,
+        select: {
+          ...productDefaultSelector,
+          ...withCategory,
+          ...withImages,
+        },
       });
 
       return products;
@@ -43,7 +28,12 @@ export const lelangRouter = createRouter()
 
       const products = await ctx.prisma.product.findMany({
         where: { closingDate: { gte: today } },
-        select: productSelectorWithCategory,
+        select: {
+          ...productDefaultSelector,
+          ...withCategory,
+          ...withImages,
+          ...withHighestBid,
+        },
       });
 
       return products;
@@ -56,8 +46,13 @@ export const lelangRouter = createRouter()
       if (!userId) return null;
 
       const products = await ctx.prisma.product.findMany({
-        where: { userId },
-        select: productSelectorWithCategory,
+        where: { userID: userId },
+        select: {
+          ...productDefaultSelector,
+          ...withCategory,
+          ...withImages,
+          ...withHighestBid,
+        },
       });
 
       return products;
@@ -73,9 +68,13 @@ export const lelangRouter = createRouter()
         data: {
           ...input.data,
           openingPrice: Number(input.data.openingPrice),
-          userId: input.userId,
+          userID: input.userId,
         },
-        select: productSelectorWithCategory,
+        select: {
+          ...productDefaultSelector,
+          ...withCategory,
+          ...withImages,
+        },
       });
 
       return newProduct;

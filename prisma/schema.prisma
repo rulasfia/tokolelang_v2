@@ -52,7 +52,8 @@ model User {
     sessions      Session[]
 
     role          Role @default(USER)
-    Products      Product[]
+    products      Product[]
+    offers        Bid[]
 }
 
 model VerificationToken {
@@ -69,12 +70,16 @@ model Product {
     description  String
     openingPrice Float
     closingDate  DateTime
+    location     String
     
     categoryID   String
     category     Category @relation(fields: [categoryID], references: [id], onDelete: Cascade)
 
-    userId       String
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userID       String
+    user         User     @relation(fields: [userID], references: [id], onDelete: Cascade)
+
+    images       Image[]
+    offers       Bid[]
 
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt
@@ -86,6 +91,31 @@ model Category {
     description  String
 
     products     Product[]
+
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+}
+
+model Bid {
+    id           String   @id @default(cuid())
+    price        Float
+    userID       String
+    user         User     @relation(fields: [userID], references: [id], onDelete: Cascade)
+
+    productID    String
+    product      Product  @relation(fields: [productID], references: [id], onDelete: Cascade)
+
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+}
+
+model Image {
+    id           String   @id @default(cuid())
+    name         String
+    url          String
+
+    productID    String
+    product      Product  @relation(fields: [productID], references: [id], onDelete: Cascade)
 
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt

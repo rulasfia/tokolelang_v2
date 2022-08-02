@@ -1,16 +1,16 @@
-import type { SubmitHandler } from "react-hook-form";
-import type { INewLelangSchema } from "@utils/validation/lelangSchema";
+import Button from "@components/atoms/Button";
+import AuthenticatedLayout from "@components/layouts/AuthenticatedLayout";
+import CreateNewKategori from "@components/organisms/Kategori/CreateNewKategori";
 import type { NextPageWithLayout } from "@pages/_app";
+import { useZodForm } from "@utils/hooks/useZodForm";
+import { formatDateTimeInput } from "@utils/transformers/formatDateTime";
+import { trpc } from "@utils/trpc";
+import type { INewLelangSchema } from "@utils/validation/lelangSchema";
+import { newLelangSchema } from "@utils/validation/lelangSchema";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import AuthenticatedLayout from "@components/layouts/AuthenticatedLayout";
-import { trpc } from "@utils/trpc";
-import { useZodForm } from "@utils/hooks/useZodForm";
-import { newLelangSchema } from "@utils/validation/lelangSchema";
-import Button from "@components/atoms/Button";
-import CreateNewKategori from "@components/organisms/Kategori/CreateNewKategori";
 import { useState } from "react";
-import { formatDateTimeInput } from "@utils/transformers/formatDateTime";
+import type { SubmitHandler } from "react-hook-form";
 
 const LelangBaruPage: NextPageWithLayout = () => {
   const { data: sessionData } = useSession();
@@ -23,8 +23,8 @@ const LelangBaruPage: NextPageWithLayout = () => {
   const utils = trpc.useContext();
   const { data: categories } = trpc.useQuery(["kategori.all"]);
   const createLelang = trpc.useMutation("lelang.create", {
-    onSuccess: () => {
-      utils.invalidateQueries("lelang.all");
+    onSuccess: async () => {
+      await utils.invalidateQueries("lelang.dibuat");
     },
   });
 
@@ -36,6 +36,7 @@ const LelangBaruPage: NextPageWithLayout = () => {
       openingPrice: "",
       closingDate: new Date(),
       categoryID: "",
+      location: "",
     },
   });
 
@@ -44,7 +45,7 @@ const LelangBaruPage: NextPageWithLayout = () => {
       try {
         const closingDate = new Date(controlledForms.datetime);
 
-        createLelang.mutate({
+        createLelang.mutateAsync({
           data: { ...values, closingDate },
           userId: sessionData.user.id,
         });
@@ -110,6 +111,14 @@ const LelangBaruPage: NextPageWithLayout = () => {
           {methods.formState.errors.closingDate?.message && (
             <p className="text-red-700">
               {methods.formState.errors.closingDate?.message}
+            </p>
+          )}
+
+          <label htmlFor="location">Lokasi </label>
+          <input type="text" id="location" {...methods.register("location")} />
+          {methods.formState.errors.location?.message && (
+            <p className="text-red-700">
+              {methods.formState.errors.location?.message}
             </p>
           )}
 
