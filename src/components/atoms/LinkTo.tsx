@@ -1,9 +1,9 @@
-import { useLink } from "@react-aria/link";
 import { AriaLinkProps } from "@react-types/link";
 import clsx from "clsx";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { useRef } from "react";
+import { ForwardedRef, forwardRef, useRef } from "react";
+import { useLink } from "react-aria";
 
 interface ComponentProps extends AriaLinkProps {
   children: ReactNode;
@@ -13,7 +13,10 @@ interface ComponentProps extends AriaLinkProps {
   className?: string;
 }
 
-const LinkTo = (props: ComponentProps) => {
+const LinkTo = forwardRef(function LinkTo(
+  props: ComponentProps,
+  forwardedRef: ForwardedRef<unknown>
+) {
   const ref = useRef<HTMLAnchorElement>(null);
   const { linkProps } = useLink(props, ref);
 
@@ -47,6 +50,6 @@ const LinkTo = (props: ComponentProps) => {
       </a>
     </Link>
   );
-};
+});
 
 export default LinkTo;

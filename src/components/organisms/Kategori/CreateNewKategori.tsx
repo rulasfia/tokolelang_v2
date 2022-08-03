@@ -1,22 +1,20 @@
-import type { SubmitHandler } from "react-hook-form";
-import type { INewKategoriSchema } from "@utils/validation/kategoriSchema";
-import DialogProvider from "@components/molecules/Dialog/DialogProvider";
+import Button from "@components/atoms/Button";
 import DialogContent from "@components/molecules/Dialog/DialogContent";
-import { useRef, useState } from "react";
-import { trpc } from "@utils/trpc";
+import DialogProvider from "@components/molecules/Dialog/DialogProvider";
 import { useZodForm } from "@utils/hooks/useZodForm";
+import { trpc } from "@utils/trpc";
+import type { INewKategoriSchema } from "@utils/validation/kategoriSchema";
 import { newKategoriSchema } from "@utils/validation/kategoriSchema";
 import { useSession } from "next-auth/react";
-import Button from "@components/atoms/Button";
+import { useRef, useState } from "react";
+import type { SubmitHandler } from "react-hook-form";
 
 const CreateNewKategori = () => {
   const { data: sessionData } = useSession();
-  const dialogContentRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const toggleModal = () => setIsModalOpen((cv) => !cv);
 
   const utils = trpc.useContext();
-  const { data: categories } = trpc.useQuery(["kategori.all"]);
   const createKategori = trpc.useMutation("kategori.create", {
     onSuccess: () => {
       utils.invalidateQueries("kategori.all");
@@ -51,9 +49,9 @@ const CreateNewKategori = () => {
       toggleModal={toggleModal}
       title="Buat Kategori Baru"
       trigger={
-        <button type="button" className="w-2/5 text-sm">
+        <Button type="button" fullWidth vari="secondary">
           Tambah Kategori
-        </button>
+        </Button>
       }
     >
       <form

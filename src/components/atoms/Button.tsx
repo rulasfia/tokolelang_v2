@@ -1,14 +1,19 @@
-import { useButton } from "@react-aria/button";
 import { AriaButtonProps } from "@react-types/button";
 import clsx from "clsx";
-import type { ReactNode } from "react";
-import { useRef } from "react";
+import type { ForwardedRef } from "react";
+import { forwardRef, ReactNode, useRef } from "react";
+import { useButton } from "react-aria";
 
 interface ComponentProps extends AriaButtonProps<"button"> {
   children: ReactNode;
+  vari?: "primary" | "secondary";
+  fullWidth?: boolean;
 }
 
-const Button = (props: ComponentProps) => {
+const Button = forwardRef(function Button(
+  { vari = "primary", fullWidth = false, ...props }: ComponentProps,
+  forwardedRef: ForwardedRef<unknown>
+) {
   const ref = useRef<HTMLButtonElement>(null);
   const { buttonProps } = useButton(props, ref);
   const { children } = props;
@@ -21,13 +26,25 @@ const Button = (props: ComponentProps) => {
         "border-2 text-sm font-medium capitalize transition duration-75",
         "focus:outline-none focus-visible:ring focus-visible:ring-opacity-75",
         "rounded-md py-2 px-6",
-        "focus-visible:ring-primary-400",
-        "border-primary-700 bg-primary-700 text-white hover:border-primary-600 hover:bg-primary-600 disabled:border-primary-600 disabled:bg-primary-600 dark:border-primary-600 dark:bg-primary-600 dark:text-white dark:hover:border-primary-700 dark:hover:bg-primary-700"
+        //
+        fullWidth && "w-full",
+        //
+        vari === "primary" && [
+          "focus-visible:ring-primary-400",
+          "border-primary-600 bg-primary-600 text-white hover:border-primary-700 hover:bg-primary-700",
+          "disabled:border-primary-700 disabled:bg-primary-700 disabled:hover:border-primary-700 disabled:hover:bg-primary-700",
+        ],
+        //
+        vari === "secondary" && [
+          "focus-visible:ring-primary-400",
+          "border-primary-100 bg-primary-100 text-primary-700 hover:border-primary-200 hover:bg-primary-200",
+          "disabled:border-primary-200 disabled:bg-primary-200 disabled:hover:border-primary-200 disabled:hover:bg-primary-200",
+        ]
       )}
     >
       {children}
     </button>
   );
-};
+});
 
 export default Button;

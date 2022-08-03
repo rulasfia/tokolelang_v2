@@ -1,4 +1,3 @@
-import LocationIcon from "@components/atoms/icons/LocationIcon";
 import AuthenticatedLayout from "@components/layouts/AuthenticatedLayout";
 import ProductCard from "@components/organisms/Lelang/ProductCard";
 import { getFirstImage, getHighestBid } from "@utils/transformers/formatText";

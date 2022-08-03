@@ -1,18 +1,26 @@
 import Button from "@components/atoms/Button";
+import ComboBox, { Item } from "@components/atoms/input/ComboBox";
 import Label from "@components/atoms/input/Label";
 import TextArea from "@components/atoms/input/TextArea";
-import TextField from "@components/atoms/input/TextField";
+import TextField, { InputError } from "@components/atoms/input/TextField";
+import TimeField from "@components/atoms/input/TimeField";
 import AuthenticatedLayout from "@components/layouts/AuthenticatedLayout";
 import CreateNewKategori from "@components/organisms/Kategori/CreateNewKategori";
+import { Time } from "@internationalized/date";
 import type { NextPageWithLayout } from "@pages/_app";
 import { useZodForm } from "@utils/hooks/useZodForm";
-import { formatDateTimeInput } from "@utils/transformers/formatDateTime";
+import {
+  formatDateInput,
+  formatDateTimeInput,
+  formatTime,
+  formatTimeInput,
+} from "@utils/transformers/formatDateTime";
 import { trpc } from "@utils/trpc";
 import type { INewLelangSchema } from "@utils/validation/lelangSchema";
 import { newLelangSchema } from "@utils/validation/lelangSchema";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { FormProvider, SubmitHandler } from "react-hook-form";
 
 const LelangBaruPage: NextPageWithLayout = () => {
@@ -20,8 +28,11 @@ const LelangBaruPage: NextPageWithLayout = () => {
   const router = useRouter();
 
   const [controlledForms, setControlledForms] = useState({
-    datetime: formatDateTimeInput(new Date()),
+    date: formatDateInput(new Date()),
+    time: formatTimeInput(new Date()),
   });
+
+  // console.log(formatTimeInput(new Date()));
 
   const utils = trpc.useContext();
   const { data: categories } = trpc.useQuery(["kategori.all"]);
@@ -46,7 +57,9 @@ const LelangBaruPage: NextPageWithLayout = () => {
   const onSubmitHandler: SubmitHandler<INewLelangSchema> = async (values) => {
     if (!!sessionData && sessionData.user?.id) {
       try {
-        const closingDate = new Date(controlledForms.datetime);
+        const closingDate = new Date(
+          `${controlledForms.date}T${controlledForms.time.toString()}`
+        );
 
         createLelang.mutateAsync({
           data: { ...values, closingDate },
@@ -62,7 +75,9 @@ const LelangBaruPage: NextPageWithLayout = () => {
 
   return (
     <main>
-      <h2>Lelang Baru</h2>
+      <h2 className="text-3xl font-extrabold text-gray-700 md:text-4xl lg:text-4xl">
+        Buat Lelang Baru
+      </h2>
 
       <FormProvider {...methods}>
         <form
@@ -71,22 +86,22 @@ const LelangBaruPage: NextPageWithLayout = () => {
           noValidate
         >
           <div className="mb-6 flex flex-col gap-x-3">
-            <Label id="name">Nama</Label>
-            <TextField statefull type="text" id="nama" />
+            <Label id="name">Nama Barang</Label>
+            <TextField statefull type="text" id="name" />
             {methods.formState.errors.name?.message && (
-              <p className="text-red-700">
-                {methods.formState.errors.name?.message}
-              </p>
+              <InputError>{methods.formState.errors.name?.message}</InputError>
             )}
 
+            <br />
             <Label id="description">Deskripsi Barang</Label>
             <TextArea statefull id="description" />
             {methods.formState.errors.description?.message && (
-              <p className="text-red-700">
+              <InputError>
                 {methods.formState.errors.description?.message}
-              </p>
+              </InputError>
             )}
 
+            <br />
             <Label id="openingPrice">Harga Pembukaan</Label>
             <TextField
               statefull
@@ -95,47 +110,66 @@ const LelangBaruPage: NextPageWithLayout = () => {
               pattern="^[0-9]*$"
             />
             {methods.formState.errors.openingPrice?.message && (
-              <p className="text-red-700">
+              <InputError>
                 {methods.formState.errors.openingPrice?.message}
-              </p>
+              </InputError>
             )}
 
-            <Label id="closingDate">Tanggal Penutupan Lelang</Label>
-            <TextField
-              type="datetime-local"
-              id="closingDate"
-              value={controlledForms.datetime}
-              onChange={(e) =>
-                setControlledForms((cv) => ({
-                  ...cv,
-                  datetime: formatDateTimeInput(new Date(e.target.value)),
-                }))
-              }
-            />
+            <br />
+            <Label id="closingDate">Tanggal & Waktu Penutupan Lelang</Label>
+            <div className="flex flex-row items-center gap-x-3">
+              <TextField
+                style={{ width: "100%" }}
+                type="date"
+                id="closingDate"
+                value={controlledForms.date}
+                onChange={(e) =>
+                  setControlledForms((cv) => ({
+                    ...cv,
+                    date: formatDateInput(new Date(e.target.value)),
+                  }))
+                }
+              />
+              <TimeField
+                locale="id-ID"
+                label="closing time"
+                hourCycle={24}
+                value={controlledForms.time}
+                onChange={(e) =>
+                  setControlledForms((cv) => ({
+                    ...cv,
+                    time: new Time(e.hour, e.minute),
+                  }))
+                }
+              />
+            </div>
 
             {methods.formState.errors.closingDate?.message && (
-              <p className="text-red-700">
+              <InputError>
                 {methods.formState.errors.closingDate?.message}
-              </p>
+              </InputError>
             )}
 
+            <br />
             <Label id="location">Lokasi</Label>
             <TextField statefull type="text" id="location" />
             {methods.formState.errors.location?.message && (
-              <p className="text-red-700">
+              <InputError>
                 {methods.formState.errors.location?.message}
-              </p>
+              </InputError>
             )}
 
+            <br />
             <Label id="categoryID">Kategori Barang</Label>
-            <div className="flex flex-row gap-x-3">
-              <select {...methods.register("categoryID")} className="w-3/5">
-                {categories?.map((cat) => (
-                  <option value={cat.id} key={cat.id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
+            <div className="flex flex-row items-center gap-x-3">
+              <ComboBox
+                label="kategori barang"
+                {...methods.register("categoryID")}
+              >
+                {/* @ts-ignore */}
+                {categories &&
+                  categories.map((cat) => <Item key={cat.id}>{cat.name}</Item>)}
+              </ComboBox>
 
               <CreateNewKategori />
             </div>

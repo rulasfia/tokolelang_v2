@@ -33,7 +33,7 @@ const Statefull = ({ leftIcon, type, id, ...others }: ComponentProps) => {
             "block w-full rounded-lg pl-10 disabled:cursor-not-allowed disabled:bg-gray-200    sm:text-sm",
             errors && errors[id]
               ? "border-red-600 focus:border-red-800 focus:ring-2 focus:ring-red-800 "
-              : "border-gray-200 focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 "
+              : "border-gray-200 hover:border-gray-400 focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:hover:border-transparent "
           )}
         />
       </div>
@@ -50,7 +50,7 @@ const Statefull = ({ leftIcon, type, id, ...others }: ComponentProps) => {
         "block rounded-lg disabled:cursor-not-allowed disabled:bg-gray-200 sm:text-sm",
         errors && errors[id]
           ? "border-red-600 focus:border-red-800 focus:ring-2 focus:ring-red-800 "
-          : "border-gray-200 focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 "
+          : "border-gray-200 hover:border-gray-400 focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:hover:border-transparent "
       )}
     />
   );
@@ -72,7 +72,7 @@ const Stateless = ({ id, type, leftIcon, ...others }: ComponentProps) => {
           {...others}
           className={clsx(
             "block w-full rounded-lg pl-10 disabled:cursor-not-allowed disabled:bg-gray-200    sm:text-sm",
-            "border-gray-200 focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 "
+            "border-gray-200 hover:border-gray-400 focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:hover:border-transparent "
           )}
         />
       </div>
@@ -86,10 +86,15 @@ const Stateless = ({ id, type, leftIcon, ...others }: ComponentProps) => {
       {...others}
       className={clsx(
         "block rounded-lg disabled:cursor-not-allowed disabled:bg-gray-200 sm:text-sm",
-        "border-gray-200 focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 "
+        "border-gray-200 hover:border-gray-400 focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:hover:border-transparent "
       )}
     />
   );
+};
+
+/** error message */
+export const InputError = ({ children }: { children: string }) => {
+  return <p className="text-sm font-medium text-red-700">{children}</p>;
 };
 
 /** exported component */

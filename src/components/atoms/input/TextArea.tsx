@@ -24,7 +24,7 @@ const Statefull = ({ id, rows = 3, ...others }: ComponentProps) => {
         "rounded-lg disabled:cursor-not-allowed sm:text-sm",
         errors && errors[id]
           ? "border-red-600 focus:border-red-800 focus:ring-2 focus:ring-red-800  "
-          : "border-gray-200 focus:border-gray-200 focus:ring-2 focus:ring-primary-500 "
+          : "border-gray-200 hover:border-gray-400 focus:border-gray-200 focus:ring-2 focus:ring-primary-500 "
       )}
     />
   );
