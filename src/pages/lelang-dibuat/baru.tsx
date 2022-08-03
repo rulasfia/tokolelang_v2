@@ -21,7 +21,7 @@ import { newLelangSchema } from "@utils/validation/lelangSchema";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { ReactNode, useState } from "react";
-import { FormProvider, SubmitHandler } from "react-hook-form";
+import { Controller, FormProvider, SubmitHandler } from "react-hook-form";
 
 const LelangBaruPage: NextPageWithLayout = () => {
   const { data: sessionData } = useSession();
@@ -54,7 +54,11 @@ const LelangBaruPage: NextPageWithLayout = () => {
     },
   });
 
+  if (Object.keys(methods.formState.errors).length > 0)
+    console.log(methods.formState.errors);
+
   const onSubmitHandler: SubmitHandler<INewLelangSchema> = async (values) => {
+    console.log("submit");
     if (!!sessionData && sessionData.user?.id) {
       try {
         const closingDate = new Date(
@@ -162,17 +166,33 @@ const LelangBaruPage: NextPageWithLayout = () => {
             <br />
             <Label id="categoryID">Kategori Barang</Label>
             <div className="flex flex-row items-center gap-x-3">
-              <ComboBox
-                label="kategori barang"
-                {...methods.register("categoryID")}
-              >
-                {/* @ts-ignore */}
-                {categories &&
-                  categories.map((cat) => <Item key={cat.id}>{cat.name}</Item>)}
-              </ComboBox>
+              {categories && (
+                <Controller
+                  name="categoryID"
+                  control={methods.control}
+                  render={({ field }) => (
+                    <ComboBox
+                      label="kategori barang"
+                      items={categories}
+                      onSelectionChange={field.onChange}
+                      {...field}
+                    >
+                      {/* @ts-ignore */}
+                      {(item: typeof categories[number]) => (
+                        <Item key={item.id}>{item.name}</Item>
+                      )}
+                    </ComboBox>
+                  )}
+                />
+              )}
 
               <CreateNewKategori />
             </div>
+            {methods.formState.errors.categoryID?.message && (
+              <InputError>
+                {methods.formState.errors.categoryID?.message}
+              </InputError>
+            )}
           </div>
 
           <Button type="submit">

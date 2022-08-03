@@ -16,3 +16,7 @@ export const formatTime = (time: Date) => {
 export const formatTimeInput = (time: Date) => {
   return new Time(time.getHours(), time.getMinutes());
 };
+
+export const formatDateTimeLelang = (date: Date) => {
+  return format(date, "dd/MM/yyyy - HH:mm");
+};

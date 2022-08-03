@@ -12,6 +12,7 @@ export const lelangRouter = createRouter()
   .query("all", {
     resolve: async ({ ctx }) => {
       const products = await ctx.prisma.product.findMany({
+        orderBy: { closingDate: "asc" },
         select: {
           ...productDefaultSelector,
           ...withCategory,
@@ -28,6 +29,7 @@ export const lelangRouter = createRouter()
 
       const products = await ctx.prisma.product.findMany({
         where: { closingDate: { gte: today } },
+        orderBy: { closingDate: "asc" },
         select: {
           ...productDefaultSelector,
           ...withCategory,
@@ -47,6 +49,7 @@ export const lelangRouter = createRouter()
 
       const products = await ctx.prisma.product.findMany({
         where: { userID: userId },
+        orderBy: { closingDate: "asc" },
         select: {
           ...productDefaultSelector,
           ...withCategory,

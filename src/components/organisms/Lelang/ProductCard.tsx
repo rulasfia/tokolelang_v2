@@ -1,6 +1,7 @@
 import LocationIcon from "@components/atoms/icons/LocationIcon";
 import DefThumb from "@public/images/def_thumb.png";
 import { ClockIcon } from "@radix-ui/react-icons";
+import { formatDateTimeLelang } from "@utils/transformers/formatDateTime";
 import { rgbDataURL } from "@utils/transformers/formatText";
 import Image from "next/image";
 import Link from "next/link";
@@ -57,7 +58,9 @@ const ProductCard = (props: ComponentProps) => {
         {/* closing time */}
         <div className="mt-4 flex flex-row items-center gap-x-2 text-red-600">
           <ClockIcon className="font-semibold" />
-          <span className="text-sm font-medium">12/08/2022 - 15:00</span>
+          <span className="text-sm font-medium">
+            {formatDateTimeLelang(new Date(props.closingDate))}
+          </span>
         </div>
       </a>
     </Link>
